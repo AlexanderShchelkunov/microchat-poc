@@ -1,0 +1,11 @@
+def frontendPort = "8000"
+
+task npmInstall(type: Exec) {
+  commandLine("npm", "install")
+}
+
+task startFrontendServer(type: Exec) {
+  commandLine("$projectDir/node_modules/.bin/http-server", "-p", frontendPort)
+}
+
+startFrontendServer.dependsOn npmInstall

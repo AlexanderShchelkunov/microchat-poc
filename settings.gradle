@@ -1,0 +1,6 @@
+rootProject.name = 'microchat-poc'
+
+include 'message-service'
+include 'discovery-service'
+include 'censorship-service'
+include 'ui'
