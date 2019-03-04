@@ -20,6 +20,7 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.UnicastProcessor;
+import reactor.core.scheduler.Schedulers;
 
 @Slf4j
 @Component
@@ -39,16 +40,17 @@ public class ChatMessageHandler implements WebSocketHandler {
     session.receive()
         .map(WebSocketMessage::getPayloadAsText)
         .map(this::fromEvent)
-        .map(event -> {
+        .flatMap(event -> {
           if (event.getType() == EventType.CHAT_MESSAGE) {
             String text = event.getPayload().getText();
             if (text.startsWith("/roll")) {
-              return rollDice(event);
+              return Mono.fromSupplier(() -> rollDice(event))
+                  .subscribeOn(Schedulers.parallel());
             } else {
-              return censorMessage(event);
+              return Mono.just(censorMessage(event));
             }
           }
-          return event;
+          return Mono.just(event);
         })
         .doOnNext(subscriber::onNext)
         .doOnComplete(subscriber::onComplete)
