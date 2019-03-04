@@ -1,5 +1,7 @@
 package com.epam.microchat.web;
 
+import com.epam.microchat.web.client.CensorshipFeignClient;
+import com.epam.microchat.web.client.DiceFeignClient;
 import com.epam.microchat.web.domain.Event;
 import com.epam.microchat.web.domain.EventType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +27,7 @@ import reactor.core.publisher.UnicastProcessor;
 public class ChatMessageHandler implements WebSocketHandler {
 
   private final CensorshipFeignClient censorshipClient;
+  private final DiceFeignClient diceClient;
   private final UnicastProcessor<Event> eventPublisher;
   private final Flux<Event> events;
   private final ObjectMapper objectMapper;
@@ -38,7 +41,12 @@ public class ChatMessageHandler implements WebSocketHandler {
         .map(this::fromEvent)
         .map(event -> {
           if (event.getType() == EventType.CHAT_MESSAGE) {
-            return censorMessage(event);
+            String text = event.getPayload().getText();
+            if (text.startsWith("/roll")) {
+              return rollDice(event);
+            } else {
+              return censorMessage(event);
+            }
           }
           return event;
         })
@@ -50,6 +58,12 @@ public class ChatMessageHandler implements WebSocketHandler {
         .map(this::toEvent)
         .map(session::textMessage)
     );
+  }
+
+  private Event rollDice(Event event) {
+    Integer value = diceClient.roll();
+    event.getPayload().setText("My roll: " + value);
+    return event;
   }
 
   private Event censorMessage(Event event) {

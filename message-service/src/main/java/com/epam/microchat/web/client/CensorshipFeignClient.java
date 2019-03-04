@@ -1,6 +1,6 @@
-package com.epam.microchat.web;
+package com.epam.microchat.web.client;
 
-import com.epam.microchat.web.CensorshipFeignClient.CensorshipFeignClientFallback;
+import com.epam.microchat.web.client.CensorshipFeignClient.CensorshipFeignClientFallback;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
