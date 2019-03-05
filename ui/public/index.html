@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Chat</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div id="loginPane">
-  <input id="username" placeholder="Type your name">
-  <button id="login">Sign In</button>
-</div>
-<div id="chatControls">
-  <input id="message" placeholder="Type your message">
-  <button id="send">Send</button>
-</div>
-<ul id="userlist"> <!-- Built by JS --> </ul>
-<div id="chat">    <!-- Built by JS --> </div>
-<script src="websocketDemo.js"></script>
+  <div id="loginPane">
+    <label for="username" class="label">Login</label>
+    <input id="username" placeholder="Enter your name">
+    <button id="login" class="btn">Login</button>
+  </div>
+
+  <div id="chat-block">
+    <span id="welcome">Welcome, login!</span>
+    <div id="chatControls">
+      <div class="message-input">
+        <input id="message" placeholder="Enter your message">
+      </div>
+      <button id="send" class="btn-small">Send</button>
+    </div>
+    <div>
+      <ul id="userlist">
+        <!-- Built by JS -->
+      </ul>
+    </div>
+    <div id="chat">
+      <!-- Built by JS -->
+    </div>
+  </div>
+  <script src="websocketDemo.js"></script>
 </body>
+
 </html>
