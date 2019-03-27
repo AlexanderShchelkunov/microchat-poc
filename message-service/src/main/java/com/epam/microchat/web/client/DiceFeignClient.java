@@ -18,9 +18,8 @@ public interface DiceFeignClient {
 
     @Override
     public Integer roll() {
-      log.warn("Dice service unavailable, it's your lucky day!");
-      return 100;
+      log.warn("Dice service unavailable.");
+      return null;
     }
   }
-
 }

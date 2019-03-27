@@ -4,8 +4,8 @@ eureka.client.service-url.default-zone: http://localhost:8761/eureka/
 
 feign.hystrix.enabled: true
 feign.client.config.default:
-  connectTimeout: 10000
-  readTimeout: 10000
+  connectTimeout: 30000
+  readTimeout: 30000
 hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 20000
 
 censorship-service:
