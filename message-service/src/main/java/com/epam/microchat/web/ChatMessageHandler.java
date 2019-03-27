@@ -26,6 +26,8 @@ import reactor.core.scheduler.Schedulers;
 @Component
 @RequiredArgsConstructor
 public class ChatMessageHandler implements WebSocketHandler {
+	
+  private static final String ROLL_COMMAND = "/roll";
 
   private final CensorshipFeignClient censorshipClient;
   private final DiceFeignClient diceClient;
@@ -43,9 +45,9 @@ public class ChatMessageHandler implements WebSocketHandler {
         .flatMap(event -> {
           if (event.getType() == EventType.CHAT_MESSAGE) {
             String text = event.getPayload().getText();
-            if (text.startsWith("/roll")) {
+            if (text.startsWith(ROLL_COMMAND)) {
               return Mono.fromSupplier(() -> rollDice(event))
-                  .subscribeOn(Schedulers.parallel());
+                  .subscribeOn(Schedulers.elastic());
             } else {
               return Mono.just(censorMessage(event));
             }
@@ -63,8 +65,12 @@ public class ChatMessageHandler implements WebSocketHandler {
   }
 
   private Event rollDice(Event event) {
+    long start = System.currentTimeMillis();
     Integer value = diceClient.roll();
-    event.getPayload().setText("My roll: " + value);
+    long end = System.currentTimeMillis();
+    event.getPayload().setText(value != null 
+		? String.format("My roll: %s (took %.2f seconds)", value, (double) (end - start) / 1000)
+		: ROLL_COMMAND);
     return event;
   }
 

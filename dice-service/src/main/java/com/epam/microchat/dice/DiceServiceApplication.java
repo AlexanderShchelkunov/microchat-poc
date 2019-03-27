@@ -19,14 +19,14 @@ public class DiceServiceApplication {
   public class DiceController {
 
     @PostMapping
-    public Integer roll() {
+    public synchronized Integer roll() {
       sleep();
       return ThreadLocalRandom.current().nextInt(0, 100);
     }
 
     @SneakyThrows
     private void sleep() {
-      long delay = TimeUnit.SECONDS.toMillis(6);
+      long delay = TimeUnit.SECONDS.toMillis(5);
       Thread.sleep(delay);
     }
   }

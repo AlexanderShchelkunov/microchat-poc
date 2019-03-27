@@ -21,6 +21,7 @@ function onLogin() {
     id("loginPane").style.display = 'none';
     id("chat-block").style.display = 'block';
     id("welcome").innerHTML = id("welcome").innerHTML.replace("login", login);
+    id("message").focus();
   }
 }
 
