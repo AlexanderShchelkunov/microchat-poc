@@ -1,2 +1,6 @@
 gradle/
 out/
+/censorship-service/build/*
+/dice-service/build/*
+/discovery-service/build/*
+/message-service/build/*
